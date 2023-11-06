@@ -24,7 +24,7 @@
 
 
 Setting up the database:
-All we need to setup the database is the backup file " ntuaflix_backup.sql ". 
+All we need to setup the database is the backup file " ntuaflix_backup.sql " and make sure you are connected to your MySQL server. 
 1. Open a cli and navigate to the " bin " directory of mysql
 2. Before we import the data we have to create a new database first. Run " mysql -u YOUR_USERNAME -pYOUR_PASSWORD " and then " create database YOUR_PREFFERED_DB_NAME "
 3. Exit the mysql mode using ^C
