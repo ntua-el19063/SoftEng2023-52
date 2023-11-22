@@ -1,0 +1,10 @@
+GET https://localhost:9876/ntuaflix_api
+
+###
+POST https://localhost:9876/ntuaflix_api/rate/like/1/tt0000929
+
+###
+POST https://localhost:9876/ntuaflix_api/rate/dislike/1/tt0000977
+
+###
+GET https://localhost:9876/ntuaflix_api/filters/grand

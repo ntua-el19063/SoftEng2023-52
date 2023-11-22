@@ -11,7 +11,7 @@ const searchMovies = (req, res) => {
         return res.status(400).json({ error: 'Search text is required in the URL' });
     }
 
-    const sql_query = `SELECT * FROM movie`;
+    const sql_query = `SELECT * FROM title_basics`;
 
     connection.query(sql_query, (err, result) => {
         if (err) {
