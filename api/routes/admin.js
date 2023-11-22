@@ -7,5 +7,3 @@ router.get('/healthcheck', healthcheck)
 router.post('/upload/titlebasics', uploadtsv)
 
 module.exports = router
-
-lets see if the test succeeds
