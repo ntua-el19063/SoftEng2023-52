@@ -8,3 +8,8 @@ POST https://localhost:9876/ntuaflix_api/rate/dislike/1/tt0000977
 
 ###
 GET https://localhost:9876/ntuaflix_api/filters/grand
+
+###
+POST https://localhost:9876/ntuaflix_api/admin/resetall
+###
+
