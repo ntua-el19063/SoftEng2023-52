@@ -25,6 +25,11 @@ const uploadtb = (req, res) =>{
             }
             let values = row.split('\t')
             if(values.length!=8){
+                fs.unlink(`./${req.file.path}`, (err) => {
+                    if (err) {
+                        console.error('Error deleting file:', err);
+                    }
+                });
                 return res.status(400).json({
                     status: `Failed`,
                     message:` Stopped at ${values}`,

@@ -24,13 +24,18 @@ const uploadnamebasics = (req, res) =>{
                 return;
             }
             let values = row.split('\t')
-            if(values.length!=8){
+            if(values.length!=7){
+                fs.unlink(`./${req.file.path}`, (err) => {
+                    if (err) {
+                        console.error('Error deleting file:', err);
+                    }
+                });
                 return res.status(400).json({
                     status: `Failed`,
                     message:` Stopped at ${values}`,
-                    error: `Row had ${values.length} values but query needed 8`
+                    error: `Row had ${values.length} values but query needed 7`
             })}
-            let sql_query = `insert into name_basics (nconst, primaryName, birthYear, deathYear, primaryProfession, knownForTitles, imageURL) values('${values[0]}', ${values[1]}, '${values[2]}', '${values[3]}', '${values[4]}', '${values[5]}', '${values[6]}')`
+            let sql_query = `insert into name_basics (nconst, primaryName, birthYear, deathYear, primaryProfession, knownForTitles, imageURL) values('${values[0]}', '${values[1]}', ${values[2]}, ${values[3]}, '${values[4]}', '${values[5]}', '${values[6]}')`
             connection.query(sql_query, (err,result)=>{
                 if(err) {
                     return res.status(500).json({
