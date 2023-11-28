@@ -15,10 +15,10 @@ router.post('/rate/like/:userId/:movieId', like)
 router.post('/rate/dislike/:userId/:movieId', dislike)
 router.get('/filters/:searchText', searchMovies)
 router.get('/title/:titleID', bytitleID)
-router.get('/title/searchtitle', searchTitle)
-router.get('/title/bygenre', bygenre)
-router.get('/title/:nameID', bynameID)
-router.get('/title/searchname', searchname)
+router.get('/searchtitle', searchTitle)
+router.get('/bygenre', bygenre)
+router.get('/name/:nameID', bynameID)
+router.get('/searchname', searchname)
 
 
 module.exports = router
