@@ -18,7 +18,9 @@ const bygenre = async (req, res) => {
         const result = await executeQuery(query);
 
         if (result.length > 0) {
-            const titleID = result[0].tconst;
+            let response = new Array(result.length)
+            for (let i=0; i<result.length; i++){
+            let titleID = result[i].tconst;
             const [q1, q2, q3, q4] = await Promise.all([
                 executeQuery(`SELECT * FROM title_basics WHERE tconst = '${titleID}'`),
                 executeQuery(`SELECT * FROM title_akas WHERE titleId = '${titleID}'`),
@@ -26,18 +28,19 @@ const bygenre = async (req, res) => {
                 executeQuery(`SELECT * FROM title_ratings WHERE tconst='${titleID}'`),
             ]);
 
-            const response = {
+            response[i] = {
                 titleID: q1[0].tconst,
                 type: q1[0].titleType,
                 originalTitle: q1[0].originalTitle,
                 titlePoster: q1[0].imageURL,
                 startYear: q1[0].startYear,
                 endYear: q1[0].endYear,
-                genres: q1[0].genres.split(',').map((genre) => ({ genreTitle: genre })),
+                genres: q1[0].genres ? q1[0].genres.split(',').map((genre) => ({ genreTitle: genre })) : null,
                 titleAkas: q2.map((object) => ({ akaTitle: object.title, regionAbbrev: object.region })),
                 principals: q3.map((object) => ({ nameID: object.nconst, name: object.primaryName, category: object.category })),
-                rating: { avRating: q4[0].averageRating, nVotes: q4[0].numVotes }
+                rating: q4[0] ? { avRating: q4[0].averageRating, nVotes: q4[0].numVotes } : null
             };
+        }
 
             res.status(200).json(response);
         } else {

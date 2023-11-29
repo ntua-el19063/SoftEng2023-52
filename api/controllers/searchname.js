@@ -2,31 +2,33 @@ const express = require('express');
 const connection = require('../connection');
 
 const searchname = async (req, res) => {
-    const titlePart = req.body.namePart;
+    const {namePart} = req.body.nqueryObject;
 
     try {
         const result = await executeQuery(`SELECT * FROM name_basics WHERE primaryName LIKE '%${namePart}%'`);
 
         if (result.length > 0) {
-            const nameID = result[0].tconst;
+            let response = new Array(result.length)
+            for (let i=0; i<result.length; i++){
+            let nameID = result[i].nconst;
             const [q1, q2] = await Promise.all([
-                executeQuery(`select nb.nconst, nb.primaryName, nb.imageURL, nb.birthYear, nb.deathYear, nb.primaryProfession from name_basics nb where nconst = '${nameID}'`),
-                executeQuery(`select tp.tconst, tp.category from title_principals tp where nconst = '${nameID}'`)                
+                executeQuery(`select nconst, primaryName, imageURL, birthYear, deathYear, primaryProfession from name_basics where nconst = '${nameID}'`),
+                executeQuery(`select tconst, category from title_principals where nconst = '${nameID}'`)                
             ]);
 
-            const response = { 
-              nameID:q1[0].nb.nconst,
-              name: q1[0].nb.primaryName,
-              namePoster: q1[0].nb.imageURL,
-              birthYr: q1[0].nb.birthYear,
-              deathYr: q1[0].nb.deathYr,
-              profession: q1[0].nb.primaryProfession,
-              nameTitles: q2.map((object) => ({
-                titleID: object.tconst,
-                category: object.category
-            }))
+            response[i] = { 
+                nameID:q1[0].nconst,
+                name: q1[0].primaryName,
+                namePoster: q1[0].imageURL,
+                birthYr: q1[0].birthYear,
+                deathYr: q1[0].deathYr ? q1[0].deathYr : null,
+                profession: q1[0].primaryProfession,
+                nameTitles: q2.map((object) => ({
+                  titleID: object.tconst,
+                  category: object.category
+              }))
               
-          };
+          };}
 
             res.status(200).json(response);
         } else {
