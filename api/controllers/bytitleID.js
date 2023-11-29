@@ -20,19 +20,21 @@ const bytitleID = (req, res)=>{
     const fourth_query = `select * from title_ratings where tconst='${titleID}'`
     Promise.all([executeQuery(first_query), executeQuery(second_query), executeQuery(third_query), executeQuery(fourth_query)])
         .then(([q1, q2, q3, q4]) => {
-            response = { 
-                titleID:q1[0].tconst,
+            if(q1.length==0) {res.status(204).json({status:204, message:"no data to return"});}
+            else{
+            response = {
+                titleID: q1[0].tconst,
                 type: q1[0].titleType,
                 originalTitle: q1[0].originalTitle,
                 titlePoster: q1[0].imageURL,
                 startYear: q1[0].startYear,
                 endYear: q1[0].endYear,
-                genres: q1[0].genres.split(',').map((genre)=>({genreTitle :genre})),
-                titleAkas: q2.map((object) =>({akaTitle : object.title, regionAbbrev : object.region})),
-                principals: q3.map((object) => ({nameID: object.nconst, name: object.primaryName, category: object.category})),
-                rating: {avRating: q4[0].averageRating, nVotes: q4[0].numVotes}
+                genres: q1[0].genres ? q1[0].genres.split(',').map((genre) => ({ genreTitle: genre })) : null,
+                titleAkas: q2.map((object) => ({ akaTitle: object.title, regionAbbrev: object.region })),
+                principals: q3.map((object) => ({ nameID: object.nconst, name: object.primaryName, category: object.category })),
+                rating: q4[0] ? { avRating: q4[0].averageRating, nVotes: q4[0].numVotes } : null
             }
-            res.status(200).json(response)
+            res.status(200).json(response)}
         })
         .catch((err) => {
             res.status(500).json({

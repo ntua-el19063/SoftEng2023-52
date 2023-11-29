@@ -15,6 +15,12 @@ app.use(formatMiddleware)
 
 app.use('/ntuaflix_api/admin', admin)
 app.use('/ntuaflix_api/', home)
+app.use((req,res,next) => {
+    res.status(400).json({
+        status: 400,
+        message: "Bad Request"
+    })
+})
 
 const privateKey = fs.readFileSync('server.key', 'utf8');
 const certificate = fs.readFileSync('server.cert', 'utf8');

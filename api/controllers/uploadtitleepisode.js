@@ -25,7 +25,7 @@ const uploadtitleepisode = (req, res) =>{
                 return;
             }
             let values = row.split('\t')
-            if(values.length!=10){
+            if(values.length!=4){
                 fs.unlink(`./${req.file.path}`, (err) => {
                     if (err) {
                         console.error('Error deleting file:', err);
@@ -34,9 +34,9 @@ const uploadtitleepisode = (req, res) =>{
                 return res.status(400).json({
                     status: `Failed`,
                     message:` Stopped at ${values}`,
-                    error: `Row had ${values.length} values but query needed 10`
+                    error: `Row had ${values.length} values but query needed 4`
             })}
-            let sql_query = `insert into title_episode (tconst, parentTconst, seasonNumber, episodeNumber) values('${values[0]}', '${values[1]}', '${values[2]}', '${values[3]}')`
+            let sql_query = `insert into title_episode (tconst, parentTconst, seasonNumber, episodeNumber) values('${values[0]}', '${values[1]}', ${values[2]}, ${values[3]})`
             connection.query(sql_query, (err,result)=>{
                 if(err) {
                     return res.status(500).json({

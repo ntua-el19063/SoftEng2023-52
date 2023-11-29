@@ -25,7 +25,7 @@ const uploadtitleratings = (req, res) =>{
                 return;
             }
             let values = row.split('\t')
-            if(values.length!=10){
+            if(values.length!=3){
                 fs.unlink(`./${req.file.path}`, (err) => {
                     if (err) {
                         console.error('Error deleting file:', err);
@@ -34,9 +34,9 @@ const uploadtitleratings = (req, res) =>{
                 return res.status(400).json({
                     status: `Failed`,
                     message:` Stopped at ${values}`,
-                    error: `Row had ${values.length} values but query needed 10`
+                    error: `Row had ${values.length} values but query needed 3`
             })}
-            let sql_query = `insert into title_ratings (tconst, averageRating, numVotes) values('${values[0]}', '${values[1]}', '${values[2]}')`
+            let sql_query = `insert into title_ratings (tconst, averageRating, numVotes) values('${values[0]}', ${values[1]}, ${values[2]})`
             connection.query(sql_query, (err,result)=>{
                 if(err) {
                     return res.status(500).json({
