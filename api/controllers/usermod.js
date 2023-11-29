@@ -2,13 +2,17 @@ const express = require('express');
 const connection = require('../connection');
 
 const usermod = (req, res) => {
-    const sql_query = "INSERT INTO users (username, password) VALUES (?, ?) ON DUPLICATE KEY UPDATE password = ?";
+    const sql_query = "INSERT INTO user (username, pwd) VALUES (?, ?) ON DUPLICATE KEY UPDATE pwd = ?";
 
     const { username, password } = req.params;
 
     connection.query(sql_query, [username, password, password], (err, result) => {
         if (err) throw err;
-        res.send(result);
+        res.status(200).json({
+            status: 'OK',
+            message: 'User inserted/updated successfully'
+        }
+        );
     });
 };
 

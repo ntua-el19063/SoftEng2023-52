@@ -12,4 +12,6 @@ GET https://localhost:9876/ntuaflix_api/filters/grand
 ###
 POST https://localhost:9876/ntuaflix_api/admin/resetall
 ###
-
+POST https://localhost:9876/ntuaflix_api/admin/usermod/aremovic/password
+###
+GET https://localhost:9876/ntuaflix_api/admin/users/Steve Koutentakis
