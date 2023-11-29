@@ -10,7 +10,7 @@ const resetall = (req, res) => {
 
     connection.query(sql_query, (err, result) => {
         if (err) throw err;
-        else res.status(200).json({ status: 'OK' });
+        else res.status(200).send({ status: 'OK' });
     });
 };
 module.exports = resetall;

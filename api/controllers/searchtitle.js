@@ -30,15 +30,15 @@ const searchTitle = async (req, res) => {
                 principals: q3.map((object) => ({ nameID: object.nconst, name: object.primaryName, category: object.category })),
                 rating: q4[0] ? { avRating: q4[0].averageRating, nVotes: q4[0].numVotes } : null
             };}
-            res.status(200).json(response);
+            res.status(200).send(response);
         } else {
-            res.status(204).json({
+            res.status(204).send({
                 status: 204,
                 message: 'Title not found'
             });
         }
     } catch (err) {
-        res.status(500).json({
+        res.status(500).send({
             status: 'Failed',
             message: err.message
         });

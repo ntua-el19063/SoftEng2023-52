@@ -11,7 +11,7 @@ const upload = multer({ dest: uploadFolder });
 const uploadnamebasics = (req, res) =>{
     upload.single('file')(req, res, (err) => {
         if (err) {
-            return res.status(500).json({
+            return res.status(500).send({
                 status: 'failed',
                 message: 'Error uploading file',
                 error: err.message,
@@ -30,7 +30,7 @@ const uploadnamebasics = (req, res) =>{
                         console.error('Error deleting file:', err);
                     }
                 });
-                return res.status(400).json({
+                return res.status(400).send({
                     status: `Failed`,
                     message:` Stopped at ${values}`,
                     error: `Row had ${values.length} values but query needed 7`
@@ -38,13 +38,13 @@ const uploadnamebasics = (req, res) =>{
             let sql_query = `insert into name_basics (nconst, primaryName, birthYear, deathYear, primaryProfession, knownForTitles, imageURL) values('${values[0]}', '${values[1]}', ${values[2]}, ${values[3]}, '${values[4]}', '${values[5]}', '${values[6]}')`
             connection.query(sql_query, (err,result)=>{
                 if(err) {
-                    return res.status(500).json({
+                    return res.status(500).send({
                         status: 'failed',
                         message: 'Error uploading file',
                         error: err.message,
                     });
                 }
-                res.status(200).json({
+                res.status(200).send({
                     status: 'OK',
                     message: 'File loaded successfully'
                 });

@@ -8,11 +8,11 @@ const healthcheck = (req,res)=>{
     const password = connection.config.password
     connection.connect((err)=>{
         if(err){
-            res.status(500).json({
+            res.status(500).send({
                 status: 'failed',
                 dataconnection: "[database:'ntuaflix', password:'']"
             })
-        }else{res.json({
+        }else{res.send({
             status: 'OK',
             dataconnection: "[database:'ntuaflix', password:'']"
         })}

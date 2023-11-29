@@ -27,8 +27,8 @@ const searchMovies = (req, res) => {
 
         const sortedMovies = moviesWithScores.sort((a, b) => b.similarityScore - a.similarityScore);
 
-        return res.status(200).json({ success: true, movies: sortedMovies });
+        return res.status(200).send(sortedMovies);
     });
-};
+}
 
 module.exports = searchMovies

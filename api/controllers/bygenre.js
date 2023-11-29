@@ -42,15 +42,15 @@ const bygenre = async (req, res) => {
             };
         }
 
-            res.status(200).json(response);
+            res.status(200).send(response);
         } else {
-            res.status(204).json({
+            res.status(204).send({
                 status: 204,
                 message: 'No titles found for the specified criteria'
             });
         }
     } catch (err) {
-        res.status(500).json({
+        res.status(500).send({
             status: 'Failed',
             message: err.message
         });

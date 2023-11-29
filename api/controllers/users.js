@@ -10,7 +10,7 @@ const users = (req, res) => {
         if (err) throw err;
         if(result.length==0)res.status(204).json({status:204, message:"no data returned"});
         else{
-        res.status(200).json(
+        res.status(200).send(
             result
         );}
     });

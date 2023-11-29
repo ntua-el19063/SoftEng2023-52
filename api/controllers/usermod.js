@@ -8,7 +8,7 @@ const usermod = (req, res) => {
 
     connection.query(sql_query, [username, password, password], (err, result) => {
         if (err) throw err;
-        res.status(200).json({
+        res.status(200).send({
             status: 'OK',
             message: 'User inserted/updated successfully'
         }
