@@ -44,8 +44,8 @@ const bygenre = async (req, res) => {
 
             res.status(200).json(response);
         } else {
-            res.status(404).json({
-                status: 'Not Found',
+            res.status(204).json({
+                status: 204,
                 message: 'No titles found for the specified criteria'
             });
         }

@@ -19,6 +19,8 @@ const bynameID = (req, res)=>{
     
     Promise.all([executeQuery(first_query), executeQuery(second_query)])
         .then(([q1, q2]) => {
+            if(q1.length==0) {res.status(204).json({status:204, message:"no data to return"});}
+            else{
             response = { 
                 nameID:q1[0].nconst,
                 name: q1[0].primaryName,
@@ -32,7 +34,7 @@ const bynameID = (req, res)=>{
               }))
                 
             }
-            res.status(200).json(response)
+            res.status(200).json(response)}
         })
         .catch((err) => {
             res.status(500).json({

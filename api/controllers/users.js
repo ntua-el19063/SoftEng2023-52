@@ -8,9 +8,11 @@ const users = (req, res) => {
 
     connection.query(sql_query, [username], (err, result) => {
         if (err) throw err;
+        if(result.length==0)res.status(204).json({status:204, message:"no data returned"});
+        else{
         res.status(200).json(
             result
-        );
+        );}
     });
 };
 

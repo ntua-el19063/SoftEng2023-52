@@ -20,6 +20,8 @@ const bytitleID = (req, res)=>{
     const fourth_query = `select * from title_ratings where tconst='${titleID}'`
     Promise.all([executeQuery(first_query), executeQuery(second_query), executeQuery(third_query), executeQuery(fourth_query)])
         .then(([q1, q2, q3, q4]) => {
+            if(q1.length==0) {res.status(204).json({status:204, message:"no data to return"});}
+            else{
             response = {
                 titleID: q1[0].tconst,
                 type: q1[0].titleType,
@@ -32,7 +34,7 @@ const bytitleID = (req, res)=>{
                 principals: q3.map((object) => ({ nameID: object.nconst, name: object.primaryName, category: object.category })),
                 rating: q4[0] ? { avRating: q4[0].averageRating, nVotes: q4[0].numVotes } : null
             }
-            res.status(200).json(response)
+            res.status(200).json(response)}
         })
         .catch((err) => {
             res.status(500).json({
