@@ -7,6 +7,8 @@ const searchTitle = require('../controllers/searchtitle')
 const bygenre = require('../controllers/bygenre')
 const bynameID = require('../controllers/bynameID')
 const searchname = require('../controllers/searchname')
+const likedmovies = require('../controllers/likedmovies')
+const dislikedmovies = require('../controllers/dislikedmovies')
 
 router = express.Router()
 
@@ -19,6 +21,7 @@ router.get('/searchtitle', searchTitle)
 router.get('/bygenre', bygenre)
 router.get('/name/:nameID', bynameID)
 router.get('/searchname', searchname)
-
+router.get('/likedmovies/:userid', likedmovies)
+router.get('/dislikedmovies/:userid', dislikedmovies)
 
 module.exports = router

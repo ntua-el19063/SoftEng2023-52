@@ -22,7 +22,7 @@ router.post('/upload/titlecrew', uploadtitlecrew)
 router.post('/upload/titleepisode', uploadtitleepisode)
 router.post('/upload/titleprincipals', uploadtitleprincipals)
 router.post('/upload/titleratings', uploadtitleratings)
-router.post('/upload/resetall', resetall)
+router.post('/resetall', resetall)
 router.post('/usermod/:username/:password', usermod)
 router.get('/users/:username', users)
 
