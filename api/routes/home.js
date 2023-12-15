@@ -25,5 +25,4 @@ router.get('/test', test)
 router.get('/likes/:user', likes)
 router.get('/dislikes/:user', dislikes)
 
-
 module.exports = router
