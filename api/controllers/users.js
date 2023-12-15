@@ -6,6 +6,7 @@ const users = (req, res) => {
 
     const { username} = req.params;
 
+    try{
     connection.query(sql_query, [username], (err, result) => {
         if (err) throw err;
         if(result.length==0)res.status(204).json({status:204, message:"no data returned"});
@@ -13,7 +14,10 @@ const users = (req, res) => {
         res.status(200).send(
             result
         );}
-    });
+    });}
+    catch(err){
+        res.status(500).send({message : 'Internal Server Error'})
+    }
 };
 
 module.exports = users;
