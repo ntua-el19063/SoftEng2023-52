@@ -25,3 +25,15 @@ GET https://localhost:9876/ntuaflix_api/admin/users/mock
 ###
 #TEST the bad request middleware:
 GET https://localhost:9876/ntuaflix_api/fotopoulos
+
+##############
+
+GET https://localhost:9876/ntuaflix_api/likedmovies/1
+
+######
+
+GET https://localhost:9876/ntuaflix_api/dislikedmovies/1
+
+
+
+

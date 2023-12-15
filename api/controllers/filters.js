@@ -50,7 +50,11 @@ const searchMovies = (req, res) => {
         if(titleType){
             result = result.filter(movie => movie.titleType == titleType)
         }
+<<<<<<< HEAD
         if (result.length==0)return res.status(204).send({message : "No films match your filters"})
+=======
+        
+>>>>>>> 47ab34b23087ebab625e81cfcbf0ec583f3ba05b
         return res.status(200).send(result);
     });
 }
