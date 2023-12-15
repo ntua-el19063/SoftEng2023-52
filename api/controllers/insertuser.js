@@ -1,10 +1,9 @@
 const express = require('express');
 const connection = require('../connection');
 
-const usermod = (req, res) => {
-    const { username, password } = req.params;
-    const sql_query = `INSERT INTO user (username, email, pwd) VALUES ('${username}', '${username.replace(/\s/g, '')}, '${password}') ON DUPLICATE KEY UPDATE pwd = '${password}'`;
-
+const insertuser = (req, res) => {
+    const { username, email, pwd } = req.params;
+    const sql_query = `INSERT INTO user (username, email, pwd) VALUES ('${username}', '${email}', '${pwd}') ON DUPLICATE KEY UPDATE pwd = '${pwd}'`;
     try{
         connection.query(sql_query, (err, result) => {
             if (err) throw err;
@@ -19,4 +18,4 @@ const usermod = (req, res) => {
     }
 };
 
-module.exports = usermod;
+module.exports = insertuser;

@@ -8,7 +8,6 @@ const uploadtitlecrew = require('../controllers/uploadtitlecrew')
 const uploadtitleepisode = require('../controllers/uploadtitleepisode')
 const uploadtitleprincipals = require('../controllers/uploadtitleprincipals')
 const uploadtitleratings = require('../controllers/uploadtitleratings')
-const resetall = require('../controllers/resetall')
 const usermod = require('../controllers/usermod')
 const users = require('../controllers/users')
 
@@ -22,9 +21,7 @@ router.post('/upload/titlecrew', uploadtitlecrew)
 router.post('/upload/titleepisode', uploadtitleepisode)
 router.post('/upload/titleprincipals', uploadtitleprincipals)
 router.post('/upload/titleratings', uploadtitleratings)
-router.post('/upload/resetall', resetall)
 router.post('/usermod/:username/:password', usermod)
 router.get('/users/:username', users)
-
 
 module.exports = router

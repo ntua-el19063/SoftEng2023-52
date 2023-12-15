@@ -1,5 +1,4 @@
 const express = require('express');
-const mainpage = require('../controllers/home')
 const {like, dislike} = require('../controllers/rate')
 const searchMovies = require('../controllers/filters')
 const bytitleID = require('../controllers/bytitleID')
@@ -7,18 +6,24 @@ const searchTitle = require('../controllers/searchtitle')
 const bygenre = require('../controllers/bygenre')
 const bynameID = require('../controllers/bynameID')
 const searchname = require('../controllers/searchname')
+const logout = require('../controllers/logout');
+const test = require('../controllers/test');
+const {likes, dislikes} = require('../controllers/likes_dislikes')
 
 router = express.Router()
 
-router.get('/', mainpage)
+router.post('/logout', logout)
 router.post('/rate/like/:userId/:movieId', like)
 router.post('/rate/dislike/:userId/:movieId', dislike)
-router.get('/filters/:searchText', searchMovies)
+router.get('/filters', searchMovies)
 router.get('/title/:titleID', bytitleID)
 router.get('/searchtitle', searchTitle)
 router.get('/bygenre', bygenre)
 router.get('/name/:nameID', bynameID)
 router.get('/searchname', searchname)
+router.get('/test', test)
+router.get('/likes/:user', likes)
+router.get('/dislikes/:user', dislikes)
 
 
 module.exports = router
