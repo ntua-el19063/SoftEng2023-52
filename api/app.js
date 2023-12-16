@@ -25,6 +25,7 @@ app.use(cookieParser())
 //app.use('/ntuaflix_api/admin', admin_auth)
 app.use('/ntuaflix_api/', user_auth)
 ///
+app.get('/test', test)
 ///
 app.post('/signup/:username/:email/:pwd', insertuser)
 app.post('/login/:username/:email/:pwd', login)
