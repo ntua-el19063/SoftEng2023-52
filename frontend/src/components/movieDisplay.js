@@ -117,6 +117,40 @@ const MovieDisplay = (props) =>{
       }
     }
 
+    async function handleDislike(movieid){
+      try{
+        const username = document.cookie.split('=')[1].split('_')[0] 
+        const response = await connection.post(`/ntuaflix_api/rate/dislike/${username}/${movieid}`)
+        if(response.status===200){return}
+       }
+      catch(err){
+        setErrorMessage('Could not dislike the movie')
+      }
+    }
+    async function handleUnlike(movieid){
+      try{
+        const username = document.cookie.split('=')[1].split('_')[0] 
+        const response = await connection.post(`/ntuaflix_api/unrate/unlike/${username}/${movieid}`)
+        if(response.status===200){return}
+       }
+      catch(err){
+        setErrorMessage('Could not unlike the movie')
+      }
+    }
+
+    async function handleUndislike(movieid){
+      try{
+        const username = document.cookie.split('=')[1].split('_')[0] 
+        const response = await connection.post(`/ntuaflix_api/unrate/undislike/${username}/${movieid}`)
+        if(response.status===200){return}
+       }
+      catch(err){
+        setErrorMessage('Could not unlike the movie')
+      }
+    }
+
+
+
     return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -153,7 +187,7 @@ const MovieDisplay = (props) =>{
                     </Typography>
                     <div>
                       <Button startIcon={likes.includes(movie.tconst) ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />} onClick={()=>handleLike(movie.tconst)}></Button>
-                      <Button startIcon={dislikes.includes(movie.tconst) ? <ThumbDownAltIcon /> : <ThumbDownOffAltIcon />}></Button>
+                      <Button startIcon={dislikes.includes(movie.tconst) ? <ThumbDownAltIcon /> : <ThumbDownOffAltIcon />}onClick={()=>handleDislike(movie.tconst)}></Button>
                     </div>
                   </CardContent>
                 </Card>
