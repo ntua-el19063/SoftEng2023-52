@@ -25,6 +25,9 @@ const MovieDisplay = (props) =>{
   const isMounted_ = useRef(false);
   const [errorMessage, setErrorMessage] = useState('')
   let [movies,setMovies]=useState([]);
+  let [likes, setLikes]=useState('');
+  let [dislikes, setDislikes]=useState('')
+  let [currMovie, setCurrMovie]=useState('')
   let [filters, setFilters] = useState({})
 
     useEffect(() => {
@@ -69,24 +72,48 @@ const MovieDisplay = (props) =>{
       }
     }
 
+    async function get_likes(){
+      try{
+        const user = document.cookie.split('=')[1].split('_')[0] //get username from token
+        const response = await connection.get(`/ntuaflix_api/likes/${user}`, null, { withCredentials: true })
+        if (response.status===200){let likeids=response.data.map(object=>object.tconst); return setLikes(likeids)}
+        else if(response.status===204)return setErrorMessage('No liked movies')
+      }
+      catch(err){
+        setErrorMessage('Could not process your request')
+      }
+    }
+
+    async function get_dislikes(){
+      try{
+        const user = document.cookie.split('=')[1].split('_')[0] //get username from token
+        const response = await connection.get(`/ntuaflix_api/dislikes/${user}`, null, { withCredentials: true })
+        if (response.status===200){let dislikeids=response.data.map(object=>object.tconst); return setDislikes(dislikeids)}
+        else if(response.status===204)return setErrorMessage('No liked movies')
+      }
+      catch(err){
+        setErrorMessage('Could not process your request')
+      }
+    }
+
     useEffect(() => {
       if (!isMounted.current) {
         isMounted.current = true;
         return;
       }
-      get_movies()
+      get_movies();
+      get_likes();
+      get_dislikes();
     }, [filters]);
 
-    async function handleLike(){
+    async function handleLike(movieid){
       try{
-        const user = document.cookie.split('=')[1].split('_')[0] //get username from token
-        const response = await connection.post(`/ntuaflix_api/rate/like/${user}`, null, { withCredentials: true })
-        console.log(response)
-        if (response.status===200){return }
-      }
-      
+        const username = document.cookie.split('=')[1].split('_')[0] 
+        const response = await connection.post(`/ntuaflix_api/rate/like/${username}/${movieid}`)
+        if(response.status===200){return}
+       }
       catch(err){
-
+        setErrorMessage('Could not like the movie')
       }
     }
 
@@ -125,8 +152,8 @@ const MovieDisplay = (props) =>{
                     {movie.genres}
                     </Typography>
                     <div>
-                      <Button startIcon={<ThumbUpOffAltIcon />} onClick={handleLike}></Button>
-                      <Button startIcon={<ThumbDownOffAltIcon />}></Button>
+                      <Button startIcon={likes.includes(movie.tconst) ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />} onClick={()=>handleLike(movie.tconst)}></Button>
+                      <Button startIcon={dislikes.includes(movie.tconst) ? <ThumbDownAltIcon /> : <ThumbDownOffAltIcon />}></Button>
                     </div>
                   </CardContent>
                 </Card>
