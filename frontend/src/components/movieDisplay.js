@@ -80,11 +80,11 @@ const MovieDisplay = (props) =>{
     async function handleLike(){
       try{
         const user = document.cookie.split('=')[1].split('_')[0] //get username from token
-        // we have access to the username through the user_token but to insert a like via the api we need the userId
-        // Maybe we should change the backend like and dislike tables to have username instead of userId
-        //Or we could create an api endpoint to get the userId when having the username
-        // There already exists such an endpoint but it is required by Veskoukis and can only be accesed by admins
+        const response = await connection.post(`/ntuaflix_api/rate/like/${user}`, null, { withCredentials: true })
+        console.log(response)
+        if (response.status===200){return }
       }
+      
       catch(err){
 
       }

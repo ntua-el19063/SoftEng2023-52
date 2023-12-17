@@ -1,5 +1,6 @@
 const express = require('express');
 const {like, dislike} = require('../controllers/rate')
+const {unlike, undislike} = require('../controllers/unrate')
 const searchMovies = require('../controllers/filters')
 const bytitleID = require('../controllers/bytitleID')
 const searchTitle = require('../controllers/searchtitle')
@@ -13,8 +14,12 @@ const {likes, dislikes} = require('../controllers/likes_dislikes')
 router = express.Router()
 
 router.post('/logout', logout)
-router.post('/rate/like/:userId/:movieId', like)
-router.post('/rate/dislike/:userId/:movieId', dislike)
+router.post('/rate/like/:username/:movieId', like)
+router.post('/unrate/unlike/:username/:movieId', unlike)
+
+router.post('/rate/dislike/:username/:movieId', dislike)
+router.post('/unrate/undislike/:username/:movieId', undislike)
+
 router.get('/filters', searchMovies)
 router.get('/title/:titleID', bytitleID)
 router.get('/searchtitle', searchTitle)

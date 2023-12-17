@@ -6,11 +6,20 @@ POST https://localhost:9876/ntuaflix_api/logout
 GET https://localhost:9876/ntuaflix_api/dislikes/Steve Koutentakis
 
 ###
-POST https://localhost:9876/ntuaflix_api/rate/like/1/tt0000929
+POST https://localhost:9876/ntuaflix_api/rate/like/Steve Koutentakis/tt0000929
 
-###
-POST https://localhost:9876/ntuaflix_api/rate/dislike/1/tt0000977
+######
+POST https://localhost:9876/ntuaflix_api/unrate/unlike/Steve Koutentakis/tt0000929
 
+
+#######
+POST https://localhost:9876/ntuaflix_api/rate/like/George Fotopoulos/tt0015414
+
+##########
+POST https://localhost:9876/ntuaflix_api/rate/dislike/George Fotopoulos/tt0000977
+
+########
+POST https://localhost:9876/ntuaflix_api/unrate/undislike/George Fotopoulos/tt0000977
 ###
 GET https://localhost:9876/ntuaflix_api/filters
 

@@ -2,13 +2,17 @@ const express = require('express');
 const connection = require('../connection')
 
 const like = (req,res)=>{
-    const { userId, movieId } = req.params;
+    const { username, movieId } = req.params;
 
-    if (!userId || !movieId) {
+    if (!username || !movieId) {
         return res.status(400).send({ error: 'userId and movieId are required in the URL' });
     }
 
-    const sql_query = `insert into like_movie (userId, movieId) values(${userId}, '${movieId}')`
+    const sql_query = `insert into like_movie (userId, movieId) 
+    select u.id as userId, '${movieId} ' as movieID 
+    FROM user u
+    WHERE u.username = '${username} ';
+    `
     
     try{
         connection.query(sql_query, (err,result)=>{
@@ -28,13 +32,16 @@ const like = (req,res)=>{
 }
 
 const dislike = (req,res)=>{
-    const { userId, movieId } = req.params;
+    const { username, movieId } = req.params;
 
-    if (!userId || !movieId) {
-        return res.status(400).send({ error: 'userId and movieId are required in the URL' });
+    if (!username || !movieId) {
+        return res.status(400).send({ error: 'username and movieId are required in the URL' });
     }
 
-    const sql_query = `insert into dislike_movie (userId, movieId) values(${userId}, '${movieId}')`
+    const sql_query = `insert into dislike_movie (userId, movieId) select u.id as userId, '${movieId} ' as movieID 
+    FROM user u
+    WHERE u.username = '${username} ';
+    `
 
     try{
         connection.query(sql_query, (err,result)=>{

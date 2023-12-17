@@ -334,6 +334,7 @@ CREATE TABLE `user` (
   `username` varchar(24) NOT NULL,
   `email` varchar(40) NOT NULL,
   `pwd` varchar(20) NOT NULL,
+  `isAdmin` bool NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `idx_user_id` (`id`)
@@ -346,10 +347,10 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Steve Koutentakis','stevekoutentakis@gmail.com','password');
-insert into user values (2 , 'George Fotopoulos' , 'gfeorgefoto@gmail.com' , 'pwd2');
-insert into user values (3 , 'Manos Papanikolas' , 'emmanouilpapanikolas@gmail.com' , 'pwd3');
-insert into user values (4 , 'Giannis Roumeliotis' , 'mariaanastt@nkua.com' , 'daddyroumi');
+INSERT INTO `user` VALUES (1,'Steve Koutentakis','stevekoutentakis@gmail.com','password', TRUE);
+insert into user values (2 , 'George Fotopoulos' , 'gfeorgefoto@gmail.com' , 'pwd2', TRUE);
+insert into user values (3 , 'Manos Papanikolas' , 'emmanouilpapanikolas@gmail.com' , 'pwd3', TRUE);
+insert into user values (4 , 'Giannis Roumeliotis' , 'mariaanastt@nkua.com' , 'daddyroumi', TRUE);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
