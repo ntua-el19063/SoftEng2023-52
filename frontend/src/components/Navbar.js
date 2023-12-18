@@ -55,6 +55,10 @@ function ResponsiveAppBar() {
     window.location.href = 'http://localhost:3000/Likes'
   }
 
+  const handleDislikeButton = () =>{
+    window.location.href = 'http://localhost:3000/Dislikes'
+  }
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -83,6 +87,16 @@ function ResponsiveAppBar() {
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 Likes
+              </Button>
+          </Box>
+
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Button
+                key={'Disikes'}
+                onClick={handleDislikeButton}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Dislikes
               </Button>
           </Box>
 

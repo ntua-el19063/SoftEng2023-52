@@ -60,6 +60,17 @@ const MovieDisplay = (props) =>{
           setErrorMessage('Could not process your request')
         }
       }
+      else if(props.mode == 'dislikes'){
+        try{
+          const user = document.cookie.split('=')[1].split('_')[0] //get username from token
+          const response = await connection.get(`/ntuaflix_api/dislikes/${user}`, null, { withCredentials: true })
+          if (response.status===200){return setMovies(response.data)}
+          else if(response.status===204)return setErrorMessage('No disliked movies')
+        }
+        catch(err){
+          setErrorMessage('Could not process your request')
+        }
+      }
       else{
         try{
             const response = await connection.get(`/ntuaflix_api/filters`, filters, { withCredentials: true })
@@ -106,88 +117,116 @@ const MovieDisplay = (props) =>{
       get_dislikes();
     }, [filters]);
 
-    async function handleLike(movieid){
-      try{
-        const username = document.cookie.split('=')[1].split('_')[0] 
-        const response = await connection.post(`/ntuaflix_api/rate/like/${username}/${movieid}`)
-        if(response.status===200){return}
-       }
-      catch(err){
-        setErrorMessage('Could not like the movie')
+    
+  async function handleLike(movieid) {
+    try {
+      const username = document.cookie.split('=')[1].split('_')[0];
+      const response = await connection.post(`/ntuaflix_api/rate/like/${username}/${movieid}`);
+      if (response.status === 200) {
+        setLikes((prevLikes) => [...prevLikes, movieid]);
+        get_movies();
       }
+    } catch (err) {
+      setErrorMessage('Could not like the movie');
     }
+  }
 
-    async function handleDislike(movieid){
-      try{
-        const username = document.cookie.split('=')[1].split('_')[0] 
-        const response = await connection.post(`/ntuaflix_api/rate/dislike/${username}/${movieid}`)
-        if(response.status===200){return}
-       }
-      catch(err){
-        setErrorMessage('Could not dislike the movie')
+  async function handleUnlike(movieid) {
+    try {
+      const username = document.cookie.split('=')[1].split('_')[0];
+      const response = await connection.post(`/ntuaflix_api/unrate/unlike/${username}/${movieid}`);
+      if (response.status === 200) {
+        setLikes((prevLikes) => prevLikes.filter((id) => id !== movieid));
+        get_movies();
       }
+    } catch (err) {
+      setErrorMessage('Could not unlike the movie');
     }
-    async function handleUnlike(movieid){
-      try{
-        const username = document.cookie.split('=')[1].split('_')[0] 
-        const response = await connection.post(`/ntuaflix_api/unrate/unlike/${username}/${movieid}`)
-        if(response.status===200){return}
-       }
-      catch(err){
-        setErrorMessage('Could not unlike the movie')
+  }
+
+  async function handleDislike(movieid) {
+    try {
+      const username = document.cookie.split('=')[1].split('_')[0];
+      const response = await connection.post(`/ntuaflix_api/rate/dislike/${username}/${movieid}`);
+      if (response.status === 200) {
+        // Update dislikes state and re-fetch movies
+        setDislikes((prevDislikes) => [...prevDislikes, movieid]);
+        get_movies();
       }
+    } catch (err) {
+      setErrorMessage('Could not dislike the movie');
     }
+  }
 
-    async function handleUndislike(movieid){
-      try{
-        const username = document.cookie.split('=')[1].split('_')[0] 
-        const response = await connection.post(`/ntuaflix_api/unrate/undislike/${username}/${movieid}`)
-        if(response.status===200){return}
-       }
-      catch(err){
-        setErrorMessage('Could not unlike the movie')
+  async function handleUndislike(movieid) {
+    try {
+      const username = document.cookie.split('=')[1].split('_')[0];
+      const response = await connection.post(`/ntuaflix_api/unrate/undislike/${username}/${movieid}`);
+      if (response.status === 200) {
+        // Update dislikes state and re-fetch movies
+        setDislikes((prevDislikes) => prevDislikes.filter((id) => id !== movieid));
+        get_movies();
       }
+    } catch (err) {
+      setErrorMessage('Could not undislike the movie');
     }
+  }
 
-
-
-    return (
+  return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
-        <AppBar position="relative">
-        </AppBar>
-        <Typography component="h1" variant="h5">
-            <p style={{ color: 'red' }}>{errorMessage}</p>
-        </Typography>
-        <main>
+      <AppBar position="relative"></AppBar>
+      <Typography component="h1" variant="h5">
+        <p style={{ color: 'red' }}>{errorMessage}</p>
+      </Typography>
+      <main>
         <Container sx={{ py: 8 }} maxWidth="md">
-          {/* End hero unit */}
           <Grid container spacing={4}>
             {movies.map((movie) => (
               <Grid item key={movies.indexOf(movie)} xs={12} sm={6} md={4}>
-                <Card
-                  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-                >
+                <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                   <CardMedia
                     component="div"
                     sx={{
-                      pt: '150%' 
+                      pt: '150%',
                     }}
-                    image={movie.imageURL ? movie.imageURL.replace(/{[^}]*}/, 'w500').trim() : "https://louisville.edu/history/images/noimage.jpg"}
+                    image={
+                      movie.imageURL
+                        ? movie.imageURL.replace(/{[^}]*}/, 'w500').trim()
+                        : 'https://louisville.edu/history/images/noimage.jpg'
+                    }
                   />
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h5" component="h2">
                       {movie.primaryTitle}
                     </Typography>
-                    <Typography>
-                    {movie.genres ? `type: ${movie.titleType}` : ''}
-                    </Typography>
-                    <Typography>
-                    {movie.genres}
-                    </Typography>
+                    <Typography>{movie.genres ? `type: ${movie.titleType}` : ''}</Typography>
+                    <Typography>{movie.genres}</Typography>
                     <div>
-                      <Button startIcon={likes.includes(movie.tconst) ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />} onClick={()=>handleLike(movie.tconst)}></Button>
-                      <Button startIcon={dislikes.includes(movie.tconst) ? <ThumbDownAltIcon /> : <ThumbDownOffAltIcon />}onClick={()=>handleDislike(movie.tconst)}></Button>
+                      <Button
+                        startIcon={
+                          likes.includes(movie.tconst) ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />
+                        }
+                        onClick={() =>
+                          likes.includes(movie.tconst)
+                            ? handleUnlike(movie.tconst)
+                            : handleLike(movie.tconst)
+                        }
+                      ></Button>
+                      <Button
+                        startIcon={
+                          dislikes.includes(movie.tconst) ? (
+                            <ThumbDownAltIcon />
+                          ) : (
+                            <ThumbDownOffAltIcon />
+                          )
+                        }
+                        onClick={() =>
+                          dislikes.includes(movie.tconst)
+                            ? handleUndislike(movie.tconst)
+                            : handleDislike(movie.tconst)
+                        }
+                      ></Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -195,9 +234,10 @@ const MovieDisplay = (props) =>{
             ))}
           </Grid>
         </Container>
-        </main>
+      </main>
     </ThemeProvider>
   );
-}
+};
 
 export default MovieDisplay;
+
