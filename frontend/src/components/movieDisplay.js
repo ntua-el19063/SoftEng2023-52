@@ -11,11 +11,18 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import React, { useState, useEffect, useRef} from 'react';
 import connection from './axios'
 import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+
 
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+
 
 
 const defaultTheme = createTheme();
@@ -29,6 +36,15 @@ const MovieDisplay = (props) =>{
   let [dislikes, setDislikes]=useState('')
   let [currMovie, setCurrMovie]=useState('')
   let [filters, setFilters] = useState({})
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [searchText, setSearchText] = useState('');
+  const [minYear, setMinYear] = useState('');
+  const [maxYear, setMaxYear] = useState('');
+  const [selectedGenres, setSelectedGenres] = useState('');
+  const [minRuntimeMinutes, setMinRuntimeMinutes] = useState('');
+  const [maxRuntimeMinutes, setMaxRuntimeMinutes] = useState('');
+  const [titleType, setTitleType] = useState('');
+  const [genres, setGenres] = useState([]); 
 
     useEffect(() => {
       if (!isMounted_.current) {
@@ -48,6 +64,23 @@ const MovieDisplay = (props) =>{
       test_auth()
     }, []);
 
+    useEffect(() => {
+      async function fetchGenres() {
+        try {
+          const response = await connection.get(`/ntuaflix_api/genres`, null, { withCredentials: true });
+          if (response.status === 200) {
+            setGenres(response.data);
+          } else if (response.status === 204) {
+            setErrorMessage('No genres available');
+          }
+        } catch (err) {
+          setErrorMessage('Could not fetch genres');
+        }
+      }
+  
+      fetchGenres();
+    }, []); 
+
     async function get_movies(){
       if(props.mode==='likes'){
         try{
@@ -60,7 +93,7 @@ const MovieDisplay = (props) =>{
           setErrorMessage('Could not process your request')
         }
       }
-      else if(props.mode == 'dislikes'){
+      else if(props.mode === 'dislikes'){
         try{
           const user = document.cookie.split('=')[1].split('_')[0] //get username from token
           const response = await connection.get(`/ntuaflix_api/dislikes/${user}`, null, { withCredentials: true })
@@ -73,7 +106,7 @@ const MovieDisplay = (props) =>{
       }
       else{
         try{
-            const response = await connection.get(`/ntuaflix_api/filters`, filters, { withCredentials: true })
+            const response = await connection.post(`/ntuaflix_api/filters`, filters, { withCredentials: true })
             if (response.status===200){return setMovies(response.data)}
             else if(response.status===204)return setErrorMessage('No films match your filters')
         }
@@ -106,6 +139,80 @@ const MovieDisplay = (props) =>{
         setErrorMessage('Could not process your request')
       }
     }
+
+    
+
+
+    
+
+
+    const handleOpenFilterMenu = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+  
+    const handleCloseFilterMenu = () => {
+      setAnchorEl(null);
+    };
+  
+    async function handleSelectFilter(){
+    //  Build filters object based on user inputs
+      //   setFilters({
+      //   "searchText": searchText,
+      //   "minYear" : minYear,
+      //   "maxYear" : maxYear,
+      //   "genre": selectedGenres, // Convert array to comma-separated string
+      //   "minRuntimeMinutes": minRuntimeMinutes,
+      //   "maxRuntimeMinutes": maxRuntimeMinutes,
+      //   "titleType" : titleType
+      // });
+       console.log({
+        "searchText": searchText,
+        "minYear" : minYear,
+        "maxYear" : maxYear,
+        "genre": selectedGenres, // Convert array to comma-separated string
+        "minRuntimeMinutes": minRuntimeMinutes,
+        "maxRuntimeMinutes": maxRuntimeMinutes,
+        "titleType" : titleType
+      });
+        
+      try {
+        // Make a POST request to apply filters
+        const response = await connection.post('/ntuaflix_api/filters',  {
+          "searchText": searchText,
+          "minYear" : minYear,
+          "maxYear" : maxYear,
+          "genre": selectedGenres, // Convert array to comma-separated string
+          "minRuntimeMinutes": minRuntimeMinutes,
+          "maxRuntimeMinutes": maxRuntimeMinutes,
+          "titleType" : titleType
+       } , {
+          withCredentials: true,
+        });
+          console.log(response.data);
+          console.log(document.body);
+        if (response.status === 200) {
+          // Update movies state with the filtered data
+          setMovies(response.data);
+          setErrorMessage('');
+        } else if (response.status === 204) {
+          // No films match the filters
+          setMovies([]);
+          setErrorMessage('No films match your filters');
+        } else {
+          // Handle other error cases
+          setErrorMessage('Could not apply filters');
+        }
+      } catch (err) {
+        // Handle network or other errors
+        setErrorMessage('Could not apply filters');
+      }
+  
+  
+  
+      // Close the filter menu
+      handleCloseFilterMenu();
+    };
+  
 
     useEffect(() => {
       if (!isMounted.current) {
@@ -181,6 +288,81 @@ const MovieDisplay = (props) =>{
       </Typography>
       <main>
         <Container sx={{ py: 8 }} maxWidth="md">
+          <Button variant="outlined" onClick={handleOpenFilterMenu} sx={{ mb: 2 }}>
+            Filter
+          </Button>
+  
+          {/* Filter menu */}
+          <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseFilterMenu}>
+            {/* Add filter inputs */}
+            <MenuItem>
+              <TextField
+                label="Search Text"
+                value={searchText}
+                id = "Search Text"
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+            </MenuItem>
+            <MenuItem>
+              <TextField
+                type="number"
+                label="Min Year"
+                value={minYear}
+                onChange={(e) => setMinYear(e.target.value)}
+              />
+              <TextField
+                type="number"
+                label="Max Year"
+                value={maxYear}
+                onChange={(e) => setMaxYear(e.target.value)}
+              />
+            </MenuItem>
+            <MenuItem>
+              <InputLabel id="genre-label">Genre</InputLabel>
+              <Select
+                labelId="genre-label"
+                
+                value={selectedGenres}
+                onChange={(e) => setSelectedGenres(e.target.value)}
+              >
+                {/* Map over genres and create MenuItem options */}
+                {genres.map((genre) => (
+                  <MenuItem key={genre.genre} value={genre.genre}>
+                    { genre.genre}
+                  </MenuItem>
+                ))}
+              </Select>
+            </MenuItem>
+            <MenuItem>
+              <TextField
+                type="number"
+                label="Min Runtime Minutes"
+                value={minRuntimeMinutes}
+                onChange={(e) => setMinRuntimeMinutes(e.target.value)}
+              />
+              <TextField
+                type="number"
+                label="Max Runtime Minutes"
+                value={maxRuntimeMinutes}
+                onChange={(e) => setMaxRuntimeMinutes(e.target.value)}
+              />
+            </MenuItem>
+            <MenuItem>
+              <TextField
+                label="Title Type"
+                value={titleType}
+                onChange={(e) => setTitleType(e.target.value)}
+              />
+            </MenuItem>
+            <MenuItem>
+              {/* Add a button to apply filters */}
+              <Button variant="contained" onClick={handleSelectFilter}>
+                Apply Filters
+              </Button>
+            </MenuItem>
+          </Menu>
+  
+          {/* Grid container for displaying movies */}
           <Grid container spacing={4}>
             {movies.map((movie) => (
               <Grid item key={movies.indexOf(movie)} xs={12} sm={6} md={4}>
@@ -202,6 +384,7 @@ const MovieDisplay = (props) =>{
                     </Typography>
                     <Typography>{movie.genres ? `type: ${movie.titleType}` : ''}</Typography>
                     <Typography>{movie.genres}</Typography>
+                    <Typography>{movie.runtimeMinutes? `Runtime: ${movie.runtimeMinutes}` : ''}</Typography>
                     <div>
                       <Button
                         startIcon={
@@ -237,6 +420,7 @@ const MovieDisplay = (props) =>{
       </main>
     </ThemeProvider>
   );
+  
 };
 
 export default MovieDisplay;
