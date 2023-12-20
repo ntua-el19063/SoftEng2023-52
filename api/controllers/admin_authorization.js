@@ -1,4 +1,6 @@
 const express = require('express');
+const connection = require('../connection');
+
 
 const admin_auth = function (req, res, next) {
     const admin_titleCookie = req.cookies.admin_cookie;

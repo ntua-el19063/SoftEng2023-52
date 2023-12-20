@@ -9,25 +9,29 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {useState, useRef} from 'react';
+import {useState, useRef, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import connection from './axios'
-import axios from 'axios';
-
 const defaultTheme = createTheme();
 
 
 export default function SignIn(){
   const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessageUp, setErrorMessageUp] = useState('')
   const usernameRef = useRef()
   const emailRef = useRef()
   const passwordRef = useRef()
 
+  useEffect(()=>{
+    if(document.cookie.includes('user_cookie'))setErrorMessageUp(`Already Signed In! Please Logout first if you want to sign in with another Account.`)
+  },[]);
+
   async function handleSignIn(){
     try{
+    if(document.cookie.includes('user_cookie'))return setErrorMessageUp(`Already Signed In! Please Logout first if you want to sign in with another Account or continue using the current one.`)
     const response = await connection.post(`/login/${usernameRef.current.value}/${emailRef.current.value}/${passwordRef.current.value}`, null, { withCredentials: true })
     console.log(response)
-    if(response.status===200){window.location.href = 'http://localhost:3000'}
+    if(response.status===200){window.location.href = 'http://localhost:3000/movieDisplay'}
     if(response.status===400){
       setErrorMessage('Invalid user credentials. Please try again!')
     }
@@ -44,6 +48,9 @@ export default function SignIn(){
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      <Typography component="h1" variant="h5" align='center'>
+            <p style={{ color: 'red' }}>{errorMessageUp}</p>
+            </Typography>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -93,6 +100,9 @@ export default function SignIn(){
               autoComplete="current-password"
               inputRef={passwordRef}
             />
+            <Typography component="h1" variant="h5">
+            <p style={{ color: 'red' }}>{errorMessage}</p>
+            </Typography>
             <Button 
               onClick={handleSignIn}
               fullWidth
@@ -109,9 +119,6 @@ export default function SignIn(){
             >
               Home
             </Button>
-            <Typography component="h1" variant="h5">
-            <p style={{ color: 'red' }}>{errorMessage}</p>
-            </Typography>
             <Grid container>
               <Grid item>
                 <Link to='../signup'>
