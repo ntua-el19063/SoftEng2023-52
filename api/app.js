@@ -22,7 +22,7 @@ app.use(cors({
 app.use(express.json())
 app.use(formatMiddleware)
 app.use(cookieParser())
-app.use('/ntuaflix_api/admin', admin_auth)
+//app.use('/ntuaflix_api/admin', admin_auth)
 app.use('/ntuaflix_api/', user_auth)
 ///
 app.get('/test', test)

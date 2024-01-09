@@ -9,7 +9,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {useState, useRef, useEffect} from 'react';
+import {useState, useRef} from 'react';
 import { Link } from 'react-router-dom';
 import connection from './axios'
 
@@ -18,19 +18,12 @@ const defaultTheme = createTheme();
 
 export default function SignUp(){
   const [errorMessage, setErrorMessage] = useState('')
-  const [errorMessageUp, setErrorMessageUp] = useState('')
   const usernameRef = useRef()
   const emailRef = useRef()
   const passwordRef = useRef()
 
-  useEffect(()=>{
-    if(document.cookie.includes('user_cookie'))setErrorMessageUp(`You are signed in! Please Logout first if you want to create a new Account.`)
-  },[]);
-
   async function handleSignUp(){
     try{
-    if(document.cookie.includes('user_cookie'))return setErrorMessage(`Logout first to create a new Account`)
-    if(!emailRef.current.value.endsWith('.com')){return setErrorMessage('Your email must end with ".com"')}
     const response = await connection.post(`/signup/${usernameRef.current.value}/${emailRef.current.value}/${passwordRef.current.value}`)
     console.log(response)
     if(response.status===200){window.location.href = 'http://localhost:3000/signin'}
@@ -47,9 +40,6 @@ export default function SignUp(){
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Typography component="h1" variant="h5" align='center'>
-            <p style={{ color: 'red' }}>{errorMessageUp}</p>
-            </Typography>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -99,9 +89,6 @@ export default function SignUp(){
               autoComplete="current-password"
               inputRef={passwordRef}
             />
-            <Typography component="h1" variant="h5">
-            <p style={{ color: 'red' }}>{errorMessage}</p>
-            </Typography>
             <Button 
               onClick={handleSignUp}
               fullWidth
@@ -110,6 +97,9 @@ export default function SignUp(){
             >
               Sign Up
             </Button>
+            <Typography component="h1" variant="h5">
+            <p style={{ color: 'red' }}>{errorMessage}</p>
+            </Typography>
             <Grid container>
               <Grid item>
                 <Link to='../signin'>

@@ -3,7 +3,7 @@ const connection = require('../connection');
 
 const usermod = (req, res) => {
     const { username, password } = req.params;
-    const sql_query = `INSERT INTO user (username, email, pwd) VALUES ('${username}', '${username.replace(/\s/g, '')}@gmail.com', '${password}') ON DUPLICATE KEY UPDATE pwd = '${password}'`;
+    const sql_query = `INSERT INTO user (username, email, pwd) VALUES ('${username}', '${username.replace(/\s/g, '')}, '${password}') ON DUPLICATE KEY UPDATE pwd = '${password}'`;
 
     try{
         connection.query(sql_query, (err, result) => {

@@ -21,7 +21,7 @@ POST https://localhost:9876/ntuaflix_api/rate/dislike/George Fotopoulos/tt000097
 ########
 POST https://localhost:9876/ntuaflix_api/unrate/undislike/George Fotopoulos/tt0000977
 ###
-POST https://localhost:9876/ntuaflix_api/filters
+GET https://localhost:9876/ntuaflix_api/filters
 
 ###
 POST https://localhost:9876/ntuaflix_api/admin/resetall
@@ -37,11 +37,12 @@ GET https://localhost:9876/ntuaflix_api/fotopoulos
 
 ##############
 
-GET https://localhost:9876/ntuaflix_api/likedmovies/1
+GET https://localhost:9876/ntuaflix_api/likes/Steve Koutentakis
 
 ######
 
-GET https://localhost:9876/ntuaflix_api/dislikedmovies/1
+GET https://localhost:9876/ntuaflix_api/dislikes/Steve Koutentakis
 
-#######
-GET https://localhost:9876/ntuaflix_api/genres
+
+
+
