@@ -17,7 +17,7 @@ const login = (req,res)=>{
         }
         else{
             res.cookie('user_cookie', `${username}_token`, {maxAge: 30*60*1000, sameSite: 'None', secure: true})
-            if(result[0].isAdmin==1){
+            if(result[0].isadmin==1){
                res.cookie('admin_cookie', "daddyroumi", {maxAge: 30*60*1000, sameSite: 'None', secure: true})
                 //res.send("User and admin cookies given")
                 res.status(200).send({"user_cookie" : `${username}_token`, "admin_cookie" : "daddyroumi"})
