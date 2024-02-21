@@ -23,7 +23,7 @@ const searchMovies = (req, res) => {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
 
-        if(searchText){
+        if(searchText && searchText!=null ){
             // Calculate similarity scores using string-similarity library and sort the result array
             const moviesWithScores = result.map(movie => ({
                 ...movie,
@@ -32,22 +32,22 @@ const searchMovies = (req, res) => {
 
             result = moviesWithScores.sort((a, b) => b.similarityScore - a.similarityScore);
         }
-        if(minYear){
+        if(minYear && minYear!=null){
             result = result.filter(movie => movie.startYear>=minYear)
         }
-        if(maxYear){
+        if(maxYear && maxYear!=null){
             result = result.filter(movie => movie.startYear<=maxYear)
         }
-        if(genre){
+        if(genre && genre!=null){
             result = result.filter(movie => movie.genres && movie.genres.split(',').find(moviegenres => moviegenres==genre))
         }
-        if(minRuntimeMinutes){
+        if(minRuntimeMinutes && minRuntimeMinutes!=null){
             result = result.filter(movie => movie.runtimeMinutes >= minRuntimeMinutes)
         }
-        if(maxRuntimeMinutes){
+        if(maxRuntimeMinutes && maxRuntimeMinutes!=null){
             result = result.filter(movie => movie.runtimeMinutes <= maxRuntimeMinutes)
         }
-        if(titleType){
+        if(titleType && titleType!=null){
             result = result.filter(movie => movie.titleType == titleType)
         }
         if (result.length==0)return res.status(204).send({message : "No films match your filters"})

@@ -10,7 +10,7 @@ const searchname = require('../controllers/searchname')
 const logout = require('../controllers/logout');
 const test = require('../controllers/test');
 const {likes, dislikes} = require('../controllers/likes_dislikes')
-
+const genres= require('../controllers/genres')
 router = express.Router()
 
 router.post('/logout', logout)
@@ -20,7 +20,7 @@ router.post('/unrate/unlike/:username/:movieId', unlike)
 router.post('/rate/dislike/:username/:movieId', dislike)
 router.post('/unrate/undislike/:username/:movieId', undislike)
 
-router.get('/filters', searchMovies)
+router.post('/filters', searchMovies)
 router.get('/title/:titleID', bytitleID)
 router.get('/searchtitle', searchTitle)
 router.get('/bygenre', bygenre)
@@ -29,5 +29,5 @@ router.get('/searchname', searchname)
 router.get('/test', test)
 router.get('/likes/:user', likes)
 router.get('/dislikes/:user', dislikes)
-
+router.get('/genres', genres)
 module.exports = router

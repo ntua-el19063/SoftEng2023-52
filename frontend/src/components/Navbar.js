@@ -15,11 +15,8 @@ import { useEffect } from 'react';
 
 
 
-const pages = ['Movies', 'Dislikes'];
-const settings = ['Logout', 'Change Password', 'Delete Account'];
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [menuSetting, setMenuSetting] = React.useState('');
 
@@ -38,21 +35,28 @@ function ResponsiveAppBar() {
             console.log("axios error")
         }
     }
+    if(menuSetting==='Signin') {
+      window.location.href = 'http://localhost:3000/signin'
+  }
   }
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
+  const handleMoviesButton = () =>{
+    window.location.href = 'http://localhost:3000/movieDisplay'
+  }
+
   const handleLikeButton = () =>{
     window.location.href = 'http://localhost:3000/Likes'
+  }
+
+  const handleDislikeButton = () =>{
+    window.location.href = 'http://localhost:3000/Dislikes'
   }
 
   return (
@@ -77,15 +81,28 @@ function ResponsiveAppBar() {
             Ntuaflix
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          <Button
+              <Button
+                key={'Movies'}
+                onClick={handleMoviesButton}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Movies
+              </Button>
+              <Button
                 key={'Likes'}
                 onClick={handleLikeButton}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 Likes
               </Button>
+              <Button
+                key={'Disikes'}
+                onClick={handleDislikeButton}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Dislikes
+              </Button>
           </Box>
-
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -108,11 +125,20 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-                <MenuItem 
+                  <Typography variant='caption'>
+                    {document.cookie.includes('user_cookie') ? document.cookie.split('user_cookie=')[1].split('_')[0].split('%20').map(namepart=> `${namepart} `) : null}
+                  </Typography>
+                  {document.cookie.includes('user_cookie') ? <MenuItem 
                 onClick={()=>{setMenuSetting('Logout')}}
                 key={'Logout'}>
                   <Typography textAlign="center">Logout</Typography>
-                </MenuItem>
+                </MenuItem> : null}
+                {!document.cookie.includes('user_cookie')?
+                <MenuItem 
+                onClick={()=>{setMenuSetting('Signin')}}
+                key={'Signin'}>
+                  <Typography textAlign="center">Sign In</Typography>
+                </MenuItem> : null}
             </Menu>
           </Box>
         </Toolbar>
